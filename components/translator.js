@@ -4,7 +4,14 @@ const americanToBritishTitles = require("./american-to-british-titles.js")
 const britishOnly = require('./british-only.js')
 
 class Translator {
-
+    americanToBritish(text) {
+        const translation = text
+        return translation
+    }
+    britishToAmerican(text) {
+        const translation = text
+        return translation
+    }
 }
 
 module.exports = Translator;
