@@ -2,11 +2,20 @@ const chai = require('chai');
 const assert = chai.assert;
 
 const Translator = require('../components/translator.js');
+const translator = new Translator;
 
 suite('Unit Tests', () => {
-  // Translate Mangoes are my favorite fruit. to British English
-  // Translate I ate yogurt for breakfast. to British English
-  // Translate We had a party at my friend's condo. to British English
+  suite('Translate to British English', () => {
+    test('Mangoes are my favorite fruit.', () => {
+      assert.equal(translator.americanToBritish('Mangoes are my favorite fruit.'), 'Mangoes are my favourite fruit.')
+    })
+    test('I ate yogurt for breakfast.', () => {
+      assert.equal(translator.americanToBritish('I ate yogurt for breakfast.'), 'I ate yoghurt for breakfast.')
+    })
+    test("We had a party at my friend's condo.", () => {
+      assert.equal(translator.americanToBritish("We had a party at my friend's condo.", "We had a party at my friend's flat."))
+    })
+  })
   // Translate Can you toss this in the trashcan for me? to British English
   // Translate The parking lot was full. to British English
   // Translate Like a high tech Rube Goldberg machine. to British English
