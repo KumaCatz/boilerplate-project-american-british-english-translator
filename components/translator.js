@@ -31,7 +31,6 @@ class Translator {
                 matchedWords.push([key, value]);
             }
         });
-            console.log(matchedWords)
         // so we have all the matches. the next step would be then creating a new sentence that swaps the word used by the new one
         // let's try this:
         // current frase = text
