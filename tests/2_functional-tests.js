@@ -37,7 +37,7 @@ suite('Functional Tests', () => {
               assert.equal(res.status, 200);
               assert.equal(
                 res.body.error,
-                'ops wrong thing pal :('
+                'Invalid value for locale field'
               )
                 done();
             });
@@ -50,7 +50,7 @@ suite('Functional Tests', () => {
             })
             .end((err, res) => {
               assert.equal(res.status, 200);
-              assert.equal(res.body.translation, '<span id="error-msg">{"error":"No text to translate"}</span>')
+              assert.equal(res.body.error, 'Required field(s) missing')
                 done();
             });
     });
@@ -59,11 +59,10 @@ suite('Functional Tests', () => {
             .post('/api/translate')
             .send({
               text: 'Mangoes are my favorite fruit.',
-              locale: ''
             })
             .end((err, res) => {
               assert.equal(res.status, 200);
-              assert.equal(res.body.error, 'ops wrong thing pal :(')
+              assert.equal(res.body.error, 'Required field(s) missing')
                 done();
             });
     });
@@ -76,7 +75,7 @@ suite('Functional Tests', () => {
             })
             .end((err, res) => {
               assert.equal(res.status, 200);
-              assert.equal(res.body.translation, '<span id="error-msg">{"error":"No text to translate"}</span>')
+              assert.equal(res.body.error, 'No text to translate')
                 done();
             });
     });
