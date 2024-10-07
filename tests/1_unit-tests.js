@@ -7,22 +7,36 @@ const translator = new Translator;
 suite('Unit Tests', () => {
   suite('Translate to British English', () => {
     test('Mangoes are my favorite fruit.', () => {
-      assert.equal(translator.americanToBritish('Mangoes are my favorite fruit.'), 'Mangoes are my favourite fruit.')
+      assert.equal(translator.americanToBritish('Mangoes are my favorite fruit.', 'Mangoes are my <span class="highlight">favourite</span> fruit.'))
     })
     test('I ate yogurt for breakfast.', () => {
-      assert.equal(translator.americanToBritish('I ate yogurt for breakfast.'), 'I ate yoghurt for breakfast.')
+      assert.equal(translator.americanToBritish('I ate yogurt for breakfast.', 'I ate <span class="highlight">yoghurt</span> for breakfast.'))
     })
     test("We had a party at my friend's condo.", () => {
-      assert.equal(translator.americanToBritish("We had a party at my friend's condo.", "We had a party at my friend's flat."))
+      assert.equal(translator.americanToBritish(`We had a party at my friend's condo.`, `We had a party at my friend's <span class="highlight">flat</span>.`))
+    })
+    test('Can you toss this in the trashcan for me?', () => {
+      assert.equal(translator.americanToBritish('Can you toss this in the trashcan for me?', 'Can you toss this in the <span class="highlight">bin</span> for me?'))
+    })
+    test('The parking lot was full.', () => {
+      assert.equal(translator.americanToBritish('The parking lot was full.', 'The car park was full.'))
+    })
+    test('Like a high tech Rube Goldberg machine.', () => {
+      assert.equal(translator.americanToBritish('Like a high tech Rube Goldberg machine.', 'Like a high tech <span class="highlight">Heath Robinson device</span>.'))
+    })
+    test('To play hooky means to skip class or work.', () => {
+      assert.equal(translator.americanToBritish('To play hooky means to skip class or work.', 'To <span class="highlight">bunk off</span> means to skip class or work.'))
+    })
+    test('No Mr. Bond, I expect you to die.', () => {
+      assert.equal(translator.americanToBritish('No Mr. Bond, I expect you to die.', 'No <span class="highlight">Mr</span> Bond, I expect you to die.'))
+    })
+    test('Dr. Grosh will see you now.', () => {
+      assert.equal(translator.americanToBritish('Dr. Grosh will see you now.', '<span class="highlight">Dr</span> Grosh will see you now.'))
+    })
+    test('Lunch is at 12:15 today.', () => {
+      assert.equal(translator.americanToBritish('Lunch is at 12:15 today.', 'Lunch is at <span class="highlight">12.15</span> today.'))
     })
   })
-  // Translate Can you toss this in the trashcan for me? to British English
-  // Translate The parking lot was full. to British English
-  // Translate Like a high tech Rube Goldberg machine. to British English
-  // Translate To play hooky means to skip class or work. to British English
-  // Translate No Mr. Bond, I expect you to die. to British English
-  // Translate Dr. Grosh will see you now. to British English
-  // Translate Lunch is at 12:15 today. to British English
   // Translate We watched the footie match for a while. to American English
   // Translate Paracetamol takes up to an hour to work. to American English
   // Translate First, caramelise the onions. to American English

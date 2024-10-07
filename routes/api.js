@@ -16,6 +16,13 @@ module.exports = function (app) {
         } else if (locale === 'british-to-american') {
           translation = translator.britishToAmerican(text)
         }
+
+        if (text === '') {
+          translation = `<span id="error-msg">{"error":"No text to translate"}</span>`
+        } else if (translation === text) {
+          translation = 'Everything looks good to me!'
+        }
+        
         return res.json({text, translation})
       } catch(err) {
         return res.send(err)
