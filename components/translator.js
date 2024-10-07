@@ -4,47 +4,71 @@ const americanToBritishTitles = require('./american-to-british-titles.js');
 const britishOnly = require('./british-only.js');
 
 class Translator {
-    translateWord(word) {
-        return (
-            americanOnly[word] ||
-            americanToBritishSpelling[word] ||
-            americanToBritishTitles[word] ||
-            britishOnly[word]
-        );
+    // something i used but not anymore:
+    // translateWord(word) {
+    //     return (
+    //         americanOnly[word] ||
+    //         americanToBritishSpelling[word] ||
+    //         americanToBritishTitles[word] ||
+    //         britishOnly[word]
+    //     );
+    // }
+
+    swapKeyValue(object) {
+        return Object.entries(object).map(([key, value]) => [value, key])
     }
 
-    americanToBritish(text) {
-        // find if theres a match:
-        const allTranslations = [
-            ...Object.entries(americanOnly),
-            ...Object.entries(americanToBritishSpelling),
-            ...Object.entries(americanToBritishTitles),
-        ];
+    findMatchesInDatabase(keyValuePairsArray, text) {
+        let matchedKeyValuePairs = [];
 
-        let matchedWords = [];
-
-        allTranslations.forEach(([key, value]) => {
+        keyValuePairsArray.forEach(([key, value]) => {
             const regex = new RegExp(`\\b${key}(?!\\w)`, 'gi')
             let match
 
             while (match = regex.exec(text) !== null) {
-                matchedWords.push([key, value]);
+                matchedKeyValuePairs.push([key, value]);
             }
         });
+
+        return matchedKeyValuePairs
+    }
+
+    translateWords(matches, text, hoursFormat, hoursFormatTranslated) {
+        const hoursRegex = new RegExp(`(\\d{1,2})${hoursFormat}(\\d{1,2})`, "g");
+        let translation = text.replace(hoursRegex, `<span class="highlight">$1${hoursFormatTranslated}$2</span>`);
+
+        matches.forEach(([untranslated, translated]) => {
+            const regex = new RegExp(`\\b${untranslated}(?!\\w)`, 'gi');
+            translation = translation.replace(regex, `<span class="highlight">${translated}</span>`)
+        })
+
+        return translation
+    }
+
+    americanToBritish(text) {
+        // find if theres a match:
+        const americanToBritishKeyValuePairs = [
+            ...Object.entries(americanOnly),
+            ...Object.entries(americanToBritishSpelling),
+            ...Object.entries(americanToBritishTitles)
+        ];
+
+        const matches = this.findMatchesInDatabase(americanToBritishKeyValuePairs, text)
+  
         // so we have all the matches. the next step would be then creating a new sentence that swaps the word used by the new one
         // let's try this:
         // current frase = text
 
-        let translatedText = text
+        let translation = this.translateWords(matches, text, ':', '.')
 
-        translatedText = text.replace(/(\d{1,2}):(\d{1,2})/g, `<span class="highlight">$1.$2</span>`);
+        // translation = text.replace(/(\d{1,2}):(\d{1,2})/g, `<span class="highlight">$1.$2</span>`);
 
-        matchedWords.forEach(([untranslated, translated]) => {
-            const regex = new RegExp(`\\b${untranslated}(?!\\w)`, 'gi');
-            translatedText = translatedText.replace(regex, `<span class="highlight">${translated}</span>`)
-        })    
+        // matches.forEach(([untranslated, translated]) => {
+        //     const regex = new RegExp(`\\b${untranslated}(?!\\w)`, 'gi');
+        //     translation = translation.replace(regex, `<span class="highlight">${translated}</span>`)
+        // })
 
-        return translatedText
+        return translation
 
         // code used before (didn't work cause of two word translations):
         // const arrayOfWords = text.split(' ');
@@ -75,7 +99,24 @@ class Translator {
         // return translation;
     }
     britishToAmerican(text) {
-        const translation = text;
+
+        // stuff
+        const britishToAmericanKeyValuePairs = [
+            ...this.swapKeyValue(americanToBritishSpelling),
+            ...this.swapKeyValue(americanToBritishTitles),
+            ...Object.entries(britishOnly)
+        ];
+
+        
+        const matches = this.findMatchesInDatabase(britishToAmericanKeyValuePairs, text)
+  
+        // so we have all the matches. the next step would be then creating a new sentence that swaps the word used by the new one
+        // let's try this:
+        // current frase = text
+
+        let translation = this.translateWords(matches, text, '.', ':')
+        //
+
         return translation;
     }
 }
