@@ -15,17 +15,21 @@ module.exports = function (app) {
           translation = translator.americanToBritish(text)
         } else if (locale === 'british-to-american') {
           translation = translator.britishToAmerican(text)
+        } else {
+          return res.json({
+            error: 'ops wrong thing pal :('
+          })
         }
 
-        if (text === '') {
+        if (text === '' || !text) {
           translation = `<span id="error-msg">{"error":"No text to translate"}</span>`
         } else if (translation === text) {
           translation = 'Everything looks good to me!'
         }
-        
+
         return res.json({text, translation})
       } catch(err) {
-        return res.send(err)
+        return res.json({translation: `<span id="error-msg">{"error":"No text to translate"}</span>`})
       }
     });
 };
